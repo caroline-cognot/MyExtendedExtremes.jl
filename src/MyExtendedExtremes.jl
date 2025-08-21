@@ -19,7 +19,9 @@ struct MixedUniformTail{T1<:ContinuousUnivariateDistribution, T2<:ContinuousUniv
     b::Float64 #threshold between both part, 0.5 for precips (included in left part)
     end
 
+"""
 # PDF
+"""
 function pdf(d::MixedUniformTail, y::Real)
     if y < d.a
         return 0.0
@@ -30,7 +32,9 @@ function pdf(d::MixedUniformTail, y::Real)
     end
 end
 
+"""
 # CDF
+"""
 function cdf(d::MixedUniformTail, y::Real)
     if y < d.a
         return NaN
@@ -41,7 +45,9 @@ function cdf(d::MixedUniformTail, y::Real)
     end
 end
 
+"""
 # Quantile function
+"""
 function quantile(d::MixedUniformTail, q::Real)
     if q < 0 || q > 1
         throw(DomainError(q, "Quantile outside [0,1]"))

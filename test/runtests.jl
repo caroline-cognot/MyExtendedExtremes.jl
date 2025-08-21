@@ -4,7 +4,7 @@ using MyExtendedExtremes
 using Test
 
 @testset "Aqua.jl" begin
-    Aqua.test_deps_compat(MyExtendedExtremes)
+    Aqua.test_all(MyExtendedExtremes)
 end
 
 @testset "MyExtendedExtremes Tests" begin

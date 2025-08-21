@@ -1,6 +1,11 @@
+using Aqua
 using Distributions
 using MyExtendedExtremes
 using Test
+
+@testset "Aqua.jl" begin
+    Aqua.test_deps_compat(MyExtendedExtremes)
+end
 
 @testset "MyExtendedExtremes Tests" begin
     # Create a MixedUniformTail instance for testing

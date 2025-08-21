@@ -9,7 +9,13 @@ import Distributions: pdf, cdf, quantile
 
 using Distributions, Random #not sure this is necessary
 using ExtendedExtremes
+using DocStringExtensions
 
+"""
+$(TYPEDEF)
+
+$(TYPEDFIELDS)
+"""
 struct MixedUniformTail{T1<:ContinuousUnivariateDistribution, T2<:ContinuousUnivariateDistribution} <: ContinuousUnivariateDistribution
     # I wanted to put an uniform on the left part, an EGPD on the bulk and tail. EGPD only works when filtering very low value but I want all the values ! 
     p::Float64 # probability of the left part
@@ -20,7 +26,9 @@ struct MixedUniformTail{T1<:ContinuousUnivariateDistribution, T2<:ContinuousUniv
     end
 
 """
-# PDF
+$(SIGNATURES)
+
+PDF
 """
 function pdf(d::MixedUniformTail, y::Real)
     if y < d.a
@@ -33,7 +41,9 @@ function pdf(d::MixedUniformTail, y::Real)
 end
 
 """
-# CDF
+$(SIGNATURES)
+
+CDF
 """
 function cdf(d::MixedUniformTail, y::Real)
     if y < d.a
@@ -46,7 +56,9 @@ function cdf(d::MixedUniformTail, y::Real)
 end
 
 """
-# Quantile function
+$(SIGNATURES)
+
+Quantile function
 """
 function quantile(d::MixedUniformTail, q::Real)
     if q < 0 || q > 1

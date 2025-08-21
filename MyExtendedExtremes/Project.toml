@@ -1,0 +1,15 @@
+name = "MyExtendedExtremes"
+uuid = "c36f12ce-00b0-46a8-b68c-bbb9cca71595"
+authors = ["cognot <caroline.cognot@agroparistech.fr>"]
+version = "0.1.0"
+
+[deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
+ExtendedExtremes = "c3d6fec6-66cc-479b-b3f2-8ef84979700f"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
+
+[compat]
+Distributions = "0.25.120"
+ExtendedExtremes = "0.3.1"
+Plots = "1.40.19"
+julia = "1.10.0"

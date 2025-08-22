@@ -1,29 +1,36 @@
-module MyExtendedExtremes 
-#I chose my name !
+module MyExtendedExtremes
 
 export MixedUniformTail, pdf, cdf, quantile, rand, fit_mix  #I export everything 
 
-import Base: rand
-import Distributions: pdf, cdf, quantile 
-# To extend these functions, I have to import their name explicitly. When doing using, they are not modifiable.
-
-using Distributions, Random #not sure this is necessary
-using ExtendedExtremes
+using Distributions
 using DocStringExtensions
+using ExtendedExtremes
+using Random 
 
 """
 $(TYPEDEF)
 
 $(TYPEDFIELDS)
+ 
+I wanted to put an uniform on the left part, an EGPD on the bulk and tail. EGPD only works when filtering very low value but I want all the values ! 
 """
-struct MixedUniformTail{T1<:ContinuousUnivariateDistribution, T2<:ContinuousUnivariateDistribution} <: ContinuousUnivariateDistribution
-    # I wanted to put an uniform on the left part, an EGPD on the bulk and tail. EGPD only works when filtering very low value but I want all the values ! 
-    p::Float64 # probability of the left part
-    uniform_part::T1 #left part
-    tail_part::T2 # right part
-    a::Float64 #minimum value, for precip it is 0.1
-    b::Float64 #threshold between both part, 0.5 for precips (included in left part)
-    end
+struct MixedUniformTail{
+    T1<:ContinuousUnivariateDistribution,
+    T2<:ContinuousUnivariateDistribution,
+} <: ContinuousUnivariateDistribution
+    " probability of the left part "
+    p::Float64
+    " left part "
+    uniform_part::T1
+    " right part "
+    tail_part::T2 
+    " minimum value, for precip it is 0.1 "
+    a::Float64 
+    " threshold between both part, 0.5 for precips (included in left part) "
+    b::Float64 
+end
+
+import Distributions: pdf
 
 """
 $(SIGNATURES)
@@ -40,6 +47,8 @@ function pdf(d::MixedUniformTail, y::Real)
     end
 end
 
+import Distributions: cdf
+
 """
 $(SIGNATURES)
 
@@ -54,6 +63,8 @@ function cdf(d::MixedUniformTail, y::Real)
         return d.p + (1 - d.p) * cdf(d.tail_part, y - d.b)
     end
 end
+
+import Distributions: quantile
 
 """
 $(SIGNATURES)
@@ -71,7 +82,8 @@ function quantile(d::MixedUniformTail, q::Real)
     end
 end
 
-# Random sampling
+import Base: rand
+
 function rand(rng::AbstractRNG, d::MixedUniformTail)
     if rand(rng) <= d.p
         return rand(rng, d.uniform_part)
@@ -80,22 +92,21 @@ function rand(rng::AbstractRNG, d::MixedUniformTail)
     end
 end
 
-
-
-
 rand(d::MixedUniformTail) = rand(Random.GLOBAL_RNG, d)
 
-# estimation
+"""
+$(SIGNATURES)
 
-
-function fit_mix(::Type{MixedUniformTail}, data;left=0.1,middle=0.5)
+estimation
+"""
+function fit_mix(::Type{MixedUniformTail}, data; left = 0.1, middle = 0.5)
     u = middle
     prop_smallrain = sum(left .<= data .<= u) / sum(data .> 0)
-    y = data[data.>u] .- u
+    y = data[data .> u] .- u
 
     tail_part = fit_mle(ExtendedGeneralizedPareto{TBeta}, y)
 
-    return MixedUniformTail(prop_smallrain, Uniform(left,middle), tail_part, left, middle)
+    return MixedUniformTail(prop_smallrain, Uniform(left, middle), tail_part, left, middle)
 end
 
 end

@@ -1,3 +1,6 @@
 [deps]
+Distributions = "31c24e10-a181-5473-b8eb-7969acd0382f"
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
+ExtendedExtremes = "c3d6fec6-66cc-479b-b3f2-8ef84979700f"
 MyExtendedExtremes = "8f8ad11f-fafd-4bca-9428-2b36ffe65f47"
+Plots = "91a5bcdd-55d7-5caf-9e0b-520d859cae80"
